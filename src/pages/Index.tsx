@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Brain, FileText, MessageSquare, Sparkles } from 'lucide-react';
 import { DocumentUpload } from '@/components/DocumentUpload';
 import { ChatInterface } from '@/components/ChatInterface';
-import { DocumentViewer } from '@/components/DocumentViewer';
+
 import { Card } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
@@ -19,7 +19,7 @@ interface UploadedFile {
 const Index = () => {
   const [uploadedFiles, setUploadedFiles] = useState<UploadedFile[]>([]);
   const [isLoading, setIsLoading] = useState(false);
-  const [highlightedText, setHighlightedText] = useState<string>();
+  
 
   const handleFileUploaded = (file: UploadedFile) => {
     setUploadedFiles(prev => {
@@ -45,7 +45,6 @@ const Index = () => {
   };
 
   const hasDocuments = uploadedFiles.some(file => file.status === 'ready');
-  const readyDocuments = uploadedFiles.filter(file => file.status === 'ready');
 
   return (
     <div className="min-h-screen bg-background">
@@ -135,49 +134,13 @@ const Index = () => {
         ) : (
           // Main Application Interface
           <div className="h-[calc(100vh-140px)]">
-            <Tabs defaultValue="chat" className="h-full flex flex-col">
-              <TabsList className="grid w-full max-w-md mx-auto grid-cols-2 mb-6">
-                <TabsTrigger value="chat" className="flex items-center gap-2">
-                  <MessageSquare className="h-4 w-4" />
-                  Chat
-                </TabsTrigger>
-                <TabsTrigger value="documents" className="flex items-center gap-2">
-                  <FileText className="h-4 w-4" />
-                  Documents
-                </TabsTrigger>
-              </TabsList>
-
-              <div className="flex-1 grid lg:grid-cols-2 gap-6">
-                <TabsContent value="chat" className="h-full m-0">
-                  <Card className="h-full shadow-card">
-                    <ChatInterface
-                      hasDocuments={hasDocuments}
-                      onSendMessage={handleSendMessage}
-                      isLoading={isLoading}
-                    />
-                  </Card>
-                </TabsContent>
-
-                <TabsContent value="documents" className="h-full m-0 lg:col-span-2">
-                  <Card className="h-full shadow-card">
-                    <DocumentViewer
-                      documents={readyDocuments}
-                      highlightedText={highlightedText}
-                    />
-                  </Card>
-                </TabsContent>
-
-                {/* Document Viewer (always visible in chat mode) */}
-                <div className="hidden lg:block">
-                  <Card className="h-full shadow-card">
-                    <DocumentViewer
-                      documents={readyDocuments}
-                      highlightedText={highlightedText}
-                    />
-                  </Card>
-                </div>
-              </div>
-            </Tabs>
+            <Card className="h-full shadow-card">
+              <ChatInterface
+                hasDocuments={hasDocuments}
+                onSendMessage={handleSendMessage}
+                isLoading={isLoading}
+              />
+            </Card>
           </div>
         )}
       </main>
